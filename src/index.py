@@ -1,5 +1,6 @@
 import sys
 
+# check for python on local environment
 print(sys.executable)
 
 from selenium import webdriver
