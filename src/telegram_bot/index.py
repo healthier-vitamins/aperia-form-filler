@@ -1,42 +1,92 @@
-import asyncio
-import telegram
-from telegram.ext import Application
-from telegram import Update
-
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-import pprint
-import json
+import logging
+
+logger = logging.getLogger(__name__)
+
+from datetime import datetime
 
 
-async def main():
-    telegram_env = os.getenv("TELEGRAM_TOKEN")
-    bot = telegram.Bot(telegram_env or "")
-    async with bot:
-        print(await bot.get_me())
-        print("====================================================")
-        updates = await bot.get_updates()
-        if updates:
-            for update in updates:
-                print(update)
-                print("====================================================")
-                pprint.pprint(update)
-                print("2 ====================================================")
-                # print(json.dumps(update, indent=4, sort_keys=True))
-                # print("3 ====================================================")
-                if update.message and update.message.from_user:
-                    print(update.message.from_user.id)
-                    print("====================================================")
-                    await bot.send_message(
-                        text="hi", chat_id=update.message.from_user.id
-                    )
+from telegram import Update
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
-        # print(f"updates: {updates}")
-        # print(f"updates[0]: {updates[0]}")
+import subprocess
+import sys
+
+# Format the current date and time
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+# https://github.com/python-telegram-bot/python-telegram-bot/wiki/Extensions---Your-first-Bot
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    filename=f"aperia-form-filler_{timestamp}.log",
+    encoding="utf-8",
+)
+
+
+async def send_qr(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # ? exec: only used when there's a need to share variables to the other file
+    # file_path = "../index.py"
+    # with open(file_path, "r") as file:
+    #     code = file.read()
+    #     exec(code)
+    try:
+        file_path = "./src/selenium/index.py"
+        result = subprocess.run(
+            [sys.executable, file_path], capture_output=True, text=True
+        )
+        if update.message:
+
+            if result.returncode == 0:
+                await update.message.reply_text("qr code script executed successfully")
+                logging.info("successfully executed")
+            else:
+                await update.message.reply_text("qr code script failed :(")
+                logging.error(result.stderr)
+
+    except Exception as err:
+        if update.message:
+            await update.message.reply_text(
+                "qr code script failed due to an exception :("
+            )
+            logging.error(err)
+
+
+async def stop_polling(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message:
+        await update.message.reply_text("stopping bot")
+    try:
+        context.bot_data["updater"].stop()
+        # token = os.getenv("TELEGRAM_TOKEN")
+        # if not token:
+        #     raise Exception("Token missing.")
+        # application = ApplicationBuilder().token(token).build()
+        # application.stop_running()
+
+        logging.shutdown()
+    except Exception as err:
+        if update.message:
+            await update.message.reply_text(
+                "stop polling failed due to an exception :("
+            )
+        logging.error(err)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    token = os.getenv("TELEGRAM_TOKEN")
+    if not token:
+        raise Exception("Token missing.")
+
+    application = ApplicationBuilder().token(token).build()
+
+    send_qr_handler = CommandHandler("send_qr", send_qr)
+    application.add_handler(send_qr_handler)
+
+    stop_polling_handler = CommandHandler("stop_polling", stop_polling)
+    application.add_handler(stop_polling_handler)
+
+    application.run_polling()

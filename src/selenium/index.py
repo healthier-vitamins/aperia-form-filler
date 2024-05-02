@@ -4,9 +4,7 @@ import sys
 print(sys.executable)
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -21,6 +19,9 @@ def main():
         name_env = os.getenv("NAME")
         mobile_env = os.getenv("MOBILE")
 
+        if not name_env or not mobile_env:
+            raise Exception("env variables missing")
+
         options = webdriver.ChromeOptions()
         options.add_experimental_option("detach", True)
 
@@ -33,13 +34,13 @@ def main():
             By.XPATH, '//*[@id="question-list"]/div[1]/div[2]/div/span/input'
         )
         name.clear()
-        name.send_keys(name_env or "")
+        name.send_keys(name_env)
 
         mobile = driver.find_element(
             By.XPATH, '//*[@id="question-list"]/div[2]/div[2]/div/span/input'
         )
         mobile.clear()
-        mobile.send_keys(mobile_env or "")
+        mobile.send_keys(mobile_env)
 
         floor = driver.find_element(
             By.XPATH, '//*[@id="question-list"]/div[4]/div[2]/div/div/div'
@@ -80,7 +81,7 @@ def main():
         )
         submit.click()
 
-        driver.implicitly_wait(5)
+        driver.implicitly_wait(3)
 
         find_by_xpath = driver.find_element(
             By.XPATH,
