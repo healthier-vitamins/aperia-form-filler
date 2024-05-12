@@ -30,8 +30,8 @@ application = ApplicationBuilder().token(token).build()
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
-    # filename=f"aperia-form-filler_{timestamp}.log",
-    # encoding="utf-8",
+    filename=f"aperia-form-filler_{timestamp}.log",
+    encoding="utf-8",
 )
 
 
