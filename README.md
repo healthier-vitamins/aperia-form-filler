@@ -1,7 +1,7 @@
 # Description
-To enter the NTT office in Aperia, a form needs to be filled which sends an SMS containing a QR code to scan at the gantry.
+To enter the NTT office in Aperia, a form must be completed, which sends an SMS containing a QR code to be scanned at the gantry.
 
-This program helps automate the process down to a single tap through telegram.
+This program helps automate the process down to a single tap through Telegram.
 
 # Operate the bot
 I run the script on my computer through task scheduler at 8.30am.
