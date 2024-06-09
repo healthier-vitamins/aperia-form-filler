@@ -1,5 +1,5 @@
 # Description
-To enter the NTT office in Aperia, a form must be completed, which sends an SMS containing a QR code to be scanned at the gantry.
+Telegram bot to automatically fill up a form with Python selenium to enter NTT office.
 
 This program helps automate the process down to a single tap through Telegram.
 
