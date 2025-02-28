@@ -66,9 +66,10 @@ async def send_qr(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def stop_polling(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message:
-        await update.message.reply_text("Stopping bot")
+
     try:
+        if update.message:
+            await update.message.reply_text("Stopping bot")
 
         # ! Does not work
         # context.bot_data["updater"].stop()
@@ -110,13 +111,13 @@ async def heartbeat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == "__main__":
-    send_qr_handler = CommandHandler("Send_QR", send_qr)
+    send_qr_handler = CommandHandler("send_qr", send_qr)
     application.add_handler(send_qr_handler)
 
-    stop_polling_handler = CommandHandler("Stop_Polling", stop_polling)
+    stop_polling_handler = CommandHandler("stop_polling", stop_polling)
     application.add_handler(stop_polling_handler)
 
-    heartbeat_handler = CommandHandler("Heartbeat", heartbeat)
+    heartbeat_handler = CommandHandler("heartbeat", heartbeat)
     application.add_handler(heartbeat_handler)
 
     application.run_polling()

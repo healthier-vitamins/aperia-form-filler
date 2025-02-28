@@ -150,12 +150,14 @@ def execute_selenium_script():
         submit_button = driver.find_element(By.XPATH, SUBMIT_BUTTON_XPATH_TEMPLATE)
         submit_button.click()
 
+        driver.implicitly_wait(5)
+
         # *************************************************************
         # *** Success indicator ***************************************
         # *************************************************************
-        # success = driver.find_element(By.XPATH, SUCCESS_XPATH_TEMPLATE)
-        # if not success:
-        #     raise Exception("Success indicator not found")
+        success = driver.find_element(By.XPATH, SUCCESS_XPATH_TEMPLATE)
+        if not success:
+            raise Exception("Success indicator not found")
 
     except OSError as err:
         print("OS error:", err)
