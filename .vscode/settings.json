@@ -3,5 +3,6 @@
   "python.analysis.fixAll": ["source.unusedImports"],
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
-  }
+  },
+  "editor.tabSize": 4
 }

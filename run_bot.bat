@@ -1,3 +1,3 @@
 @echo off
 call .\venv\Scripts\activate
-py .\src\telegram_bot\index.py
+python .\telegram_bot\telegram_listener.py
