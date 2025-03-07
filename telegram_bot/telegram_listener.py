@@ -13,23 +13,34 @@ from datetime import datetime
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# Format the current date and time
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
 token = os.getenv("TELEGRAM_TOKEN")
 if not token:
     raise Exception("Token missing.")
 
+logging_path = os.getenv("LOGGING_PATH")
+if not logging_path:
+    raise Exception("Logging path missing.")
+
+# https://github.com/python-telegram-bot/python-telegram-bot/wiki/Extensions---Your-first-Bot
 # Initialise telegram application with token
 application = ApplicationBuilder().token(token).build()
 
-# https://github.com/python-telegram-bot/python-telegram-bot/wiki/Extensions---Your-first-Bot
 
-# Logging config (python default logging library)
+# Format current date and time
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+
+# Create the directory if it doesn't exist
+os.makedirs(logging_path, exist_ok=True)
+
+# Full path to the log file
+log_file = os.path.join(logging_path, f"aperia-qr-bot_{timestamp}.log")
+
+# Logging config
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
-    filename=f"aperia-form-filler_{timestamp}.log",
+    filename=log_file,
     encoding="utf-8",
 )
 
