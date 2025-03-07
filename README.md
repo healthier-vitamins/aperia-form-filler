@@ -3,6 +3,9 @@ Telegram bot to automatically fill up a form with Python selenium to enter NTT o
 
 This program helps automate the process down to a single tap through Telegram.
 
+## Demonstration 
+[Video](https://drive.google.com/file/d/19Dr329uSgGysXI9vFfVvPMJFeHDJqTyY/view?usp=drive_link)
+
 # Operate the bot
 I run the script on my computer through task scheduler at 8.30am.
 
