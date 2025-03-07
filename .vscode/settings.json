@@ -4,5 +4,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
-  "editor.tabSize": 4
+  "editor.tabSize": 4,
+  "git.discardUntrackedChangesToTrash": true
 }
